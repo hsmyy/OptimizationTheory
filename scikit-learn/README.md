@@ -352,4 +352,47 @@ kfold = KFold(len(y), n_folds=4)
 for i, (train, test) in enumerate(kfold):
 ```
 
+##### Grid Search
+```python
+from sklearn.datasets import make_classification
+X,y = make_classification(1000, n_features=5)
+from sklearn.linear_model import LogisticRegression
+lr = LogisticRegression(class_weight='auto')
+grid_search_params = {'penalty':['l1','l2'],'C':[1,2,3,4]}
+import scipy.stats as st
+import numpy as np
+from sklearn.grid_search import GridSearchCV, RandomizedSearchCV
+gs = GridSearchCV(lr, grid_search_params)
+gs.fit(X, y)
+print gs.grid_scores_
+print max(gs.grid_scores_, key=lambda x: x[1])
+```
 
+##### L1 feature Selection
+```python
+X,y = sklearn.datasets.make_regression(noise=5)
+mess = []
+shuff = cross_validation.ShuffleSplit(y.size)
+for train, test in shuff:
+	train_X = X[train]
+	train_y = y[train]
+	test_X = X[~train]
+	test_y = y[~train]
+	lr.fit(train_X, train_y)
+	mses.append(metrics.mean_squared_error(test_y, lr.redict(test_X)))
+np.mean(mses)
+
+cv.fit(X,y)
+import numpy as np
+columns = np.arange(X.shape[1])[cv.coef_ != 0]
+mses = []
+shuff = cross_validation.ShuffleSplit(y.size)
+for train, test in shuff
+	train_X = X[train][:, columns]
+	train_y = y[train]
+	test_X = X[~train][:, columns]
+	test_y = y[~train]
+	lr.fit(train_X, train_y)
+	mses.append(metrics.mean_squared_error(test_y, lr.predict(test_X)))
+np.mean(mses)
+```
